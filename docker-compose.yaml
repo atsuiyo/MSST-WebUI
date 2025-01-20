@@ -1,0 +1,18 @@
+services:
+  webui:
+    # restart: unless-stopped # Run that option to have it run automatically at boot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "${UID}:${GID}"
+    volumes:
+      - .:/app
+    working_dir: /app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    ports:
+      - "7860:7860" # host:container port, Change the host port if the port is already in use
+    command: python webUI.py --server_name=0.0.0.0 --server_port=7860
